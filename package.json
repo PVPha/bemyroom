@@ -8,12 +8,22 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@editorjs/editorjs": "^2.22.2",
+    "@editorjs/header": "^2.6.1",
+    "@editorjs/paragraph": "^2.8.0",
+    "axios": "^0.22.0",
+    "codex-tooltip": "^1.0.2",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@editorjs/delimiter": "^1.2.0",
+    "@editorjs/embed": "^2.4.6",
+    "@editorjs/image": "^2.6.1",
+    "@editorjs/link": "^2.3.1",
+    "@editorjs/quote": "^2.4.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
@@ -21,6 +31,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
+    "editorjs-inline-image": "^0.2.1",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0"
   }
