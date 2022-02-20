@@ -2,15 +2,21 @@
   <div id="post" :style="re_style_post">
     <ul :style="re_style_display">
       <li id="post_img">
-        <img
-          :src="require('@/assets/content/' + src)"
-          alt="src"
-          class="img-fluid"
-          :style="re_style_img"
-        />
+        <!-- :src="require('@/assets/content/' + src)" -->
+        <a :href="url">
+          <img
+            :src="src"
+            alt="src"
+            class="img-fluid"
+            :style="re_style_img"
+            loading="lazy"
+          />
+        </a>
       </li>
       <li id="post_shortcut" :style="re_style_li + re_style_show">
-        <p :style="re_style_title">{{ title }}</p>
+        <p :style="re_style_title">
+          <a :href="url">{{ title }}</a>
+        </p>
       </li>
       <li id="post_detail" :style="re_style_detail + re_style_li">
         <a id="user_img" :style="re_style_show">
@@ -69,6 +75,8 @@ export default {
   props: {
     src: String,
     title: String,
+    slug: String,
+    url: String,
     re_style_post: String,
     re_style_title: String,
     re_style_display: String,

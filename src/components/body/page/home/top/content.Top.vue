@@ -20,10 +20,10 @@
           </ul>
         </md-app-content>
       </md-app> -->
-      <div class="scroll">
+      <div class="scroll not-miss">
         <ul>
           <li v-for="(post, index) of posts" :key="index">
-            <Post :src="post.src" :title="post.title" />
+            <Post :src="post.poster" :title="post.title" />
           </li>
         </ul>
       </div>
@@ -32,7 +32,7 @@
 </template>
 <script>
 import Post from "@/components/body/post/post.vue";
-import getPosts from "@/api/getPosts.js";
+//import getPosts from "@/api/getPosts.js";
 export default {
   name: "topContent",
   components: {
@@ -40,13 +40,58 @@ export default {
   },
   data() {
     return {
-      posts: [],
+      // posts: [],
     };
   },
+  created() {
+    this.$store.dispatch("loadPost");
+  },
+  computed: {
+    posts() {
+      return this.$store.state.listPost;
+    },
+    page() {
+      return this.$store.state.page;
+    },
+  },
   mounted() {
-    this.posts = getPosts(0, 4);
-    console.log(this.posts);
-    console.log("top content");
+    // this.posts = this.$store.state.listPost.data;
+
+    // this.posts = getPosts(0, 4);
+    //console.log(this.posts);
+    // console.log(this.$store.state.posts);
+    //console.log("top content");
+    document.querySelector(".not-miss").addEventListener("scroll", () => {
+      let load = false;
+      // console.log(
+      //   "khung" +
+      //     document.querySelector(".not-miss").getBoundingClientRect().bottom
+      // );
+      // console.log(
+      //   "trong" +
+      //     document.querySelector(".not-miss ul").getBoundingClientRect().bottom
+      // );
+      if (
+        document.querySelector(".not-miss ul").getBoundingClientRect().bottom <
+        document.querySelector(".not-miss").getBoundingClientRect().bottom
+      ) {
+        console.log("load more");
+        // console.log(this.posts.next_page_url);
+        if (this.page.next_page_url != null) {
+          this.$store
+            .dispatch("loadMorePost", this.page.next_page_url)
+            .then(() => {
+              console.log("load success");
+              // this.posts.push(...this.$store.state.listPost.data);
+            });
+        }
+        load = true;
+      }
+      if (load) {
+        // console.log("load more");
+        load = false;
+      }
+    });
   },
 };
 </script>

@@ -4,12 +4,16 @@
     <div class="item">
       <h2>Bài viết mới</h2>
 
-      <div class="scroll" @scroll="handleScroll('newPost')">
+      <div
+        class="scroll left-scroll"
+        @scroll="handleScroll('.left-scroll', 'newPost')"
+      >
         <ul class="main-left" id="newPost">
           <li v-for="(post, index) of posts" :key="index">
             <Post
-              :src="post.src"
+              :src="post.poster"
               :title="post.title"
+              :url="'/read/' + post.slug"
               :re_style_img="'width:35rem; height: 22rem'"
               :re_style_post="'max-width:35rem;'"
             />
@@ -19,18 +23,22 @@
     </div>
     <div class="item main-right">
       <h2>Tin tức</h2>
-      <div class="scroll" @scroll="handleScroll('news')">
-        <ul id="news">
-          <li v-for="(postNew, index) of postNews" :key="index">
-            <Post
-              :src="postNew.src"
-              :title="postNew.title"
-              :re_style_title="'font-size:1.8rem; font-weight:600'"
-              :re_style_detail="'display:none;'"
-            />
-          </li>
-        </ul>
-      </div>
+      <!-- @scroll="handleScroll('.right-scroll', 'news')" -->
+      <transition>
+        <div class="scroll right-scroll">
+          <ul id="news">
+            <li v-for="(postNew, index) of postNews" :key="index">
+              <Post
+                :src="postNew.poster"
+                :title="postNew.title"
+                :url="'/read/' + postNew.slug"
+                :re_style_title="'font-size:1.8rem; font-weight:600'"
+                :re_style_detail="'display:none;'"
+              />
+            </li>
+          </ul>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -38,24 +46,32 @@
 <script>
 import Post from "@/components/body/post/post.vue";
 
-import getPosts from "@/api/getPosts.js";
+//import getPosts from "@/api/getPosts.js";
 export default {
   name: "MainContent",
   data() {
-    return { posts: [], postNews: [] };
+    // return { posts: [], postNews: [] };
   },
   components: {
     Post,
-    // Pagination,
+  },
+  computed: {
+    posts() {
+      return this.$store.state.listPost;
+    },
+    postNews() {
+      return this.$store.state.listPost;
+    },
+    page() {
+      return this.$store.state.page;
+    },
   },
   created() {
-    this.posts = getPosts(4, 12);
-    this.postNews = getPosts(12, 20);
-    console.log(this.posts);
-    console.log(this.news);
+    // this.posts = getPosts(4, 12);
+    // this.postNews = getPosts(12, 20);
   },
   mounted() {
-    console.log("Main content");
+    //console.log("Main content");
   },
   methods: {
     showScrollBar() {
@@ -63,25 +79,40 @@ export default {
         console.log(e.target);
       };
     },
-    handleScroll(element) {
+    handleScroll(wrap_ele, element) {
       // let ele = this.$refs.scrollComponent;
       let ele = document.getElementById(element);
-      if (ele.getBoundingClientRect().bottom < window.innerHeight) {
+      let wrap = document.querySelector(wrap_ele);
+      console.log(
+        "ele" +
+          ele.getBoundingClientRect().bottom +
+          "  wrap" +
+          wrap.getBoundingClientRect().bottom
+      );
+      if (
+        ele.getBoundingClientRect().bottom <
+        wrap.getBoundingClientRect().bottom + 0.5
+      ) {
+        if (this.page.next_page_url != null) {
+          this.$store
+            .dispatch("loadMorePost", this.page.next_page_url)
+            .then(() => {
+              console.log("load success");
+              // this.posts.push(...this.$store.state.listPost.data);
+            });
+        }
         // this.loading = true;
-        setTimeout(() => {
-          if (element == "newPost") {
-            console.log(getPosts(this.posts.length, this.posts.length + 5));
-            this.posts.push(
-              ...getPosts(this.posts.length, this.posts.length + 5)
-            );
-          } else if (element == "news") {
-            console.log(getPosts(this.posts.length, this.posts.length + 5));
-            this.postNews.push(
-              ...getPosts(this.postNews.length, this.postNews.length + 5)
-            );
-          }
-          // this.loading = false;
-        }, 200);
+        // setTimeout(() => {
+        //   if (this.page.next_page_url != null) {
+        //     this.$store
+        //       .dispatch("loadMorePost", this.page.next_page_url)
+        //       .then(() => {
+        //         console.log("load success");
+        //         // this.posts.push(...this.$store.state.listPost.data);
+        //       });
+        //   }
+        //   // this.loading = false;
+        // }, 1000);
       }
     },
   },

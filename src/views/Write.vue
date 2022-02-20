@@ -2,19 +2,17 @@
   <div>
     <Header />
     <Editor />
-    <Footer />
   </div>
 </template>
 <script>
 import Header from "@/components/header/header";
-import Footer from "@/components/footer/footer.vue";
+
 import Editor from "@/components/body/post/post.Write";
 export default {
   name: "Write",
   components: {
     Editor,
     Header,
-    Footer,
   },
   mounted() {
     // window.addEventListener("scroll", () => {

@@ -5,7 +5,7 @@
         type="text"
         name="userName-login"
         placeholder="Tên đăng nhập hoặc email"
-        value="schowalter.joelle@example.org"
+        value="phampha8a3@gmail.com"
       />
       <input
         type="password"
@@ -55,13 +55,13 @@
       <input type="text" name="userName-register" placeholder="Tên đăng nhập" />
       <input type="email" name="email-register" placeholder="Email đăng ký" />
       <input
-        type="password"
-        name="password-register"
+        type="new-password"
+        name="password_new"
         placeholder="Mật khẩu đăng nhập"
       />
       <input
-        type="password"
-        name="password-register"
+        type="new-password"
+        name="password_re"
         placeholder="Nhập lại mật khẩu"
       />
       <ul>

@@ -3,19 +3,40 @@ import axios from "axios";
 
 export default createStore({
   state: {
-    post: [],
+    page: [],
+    listPost: [],
+    posts: [],
     user: [],
+    detail: [],
     btnUser: false,
+    loading: true,
   },
   getters: {
     post: (state) => {
-      return state.post;
+      return state.posts;
+    },
+    listPost: (state) => {
+      return state.listPost;
     },
   },
   mutations: {
-    SET_ITEMS(state, posts) {
-      state.post = posts;
+    SET_LIST_POSTS(state, posts) {
+      state.listPost = posts.data;
+      state.page = posts;
     },
+    SET_MORE_LIST_POSTS(state, posts) {
+      state.listPost.push(...posts.data);
+      state.page = posts;
+      // console.log(posts);
+      // console.log(state.posts);
+    },
+    SET_POST(state, post) {
+      state.posts = post;
+    },
+    SET_POST_DETAIL(state, post) {
+      state.detail = post;
+    },
+
     SET_BTNUSER(state) {
       state.btnUser = true;
     },
@@ -45,9 +66,10 @@ export default createStore({
       for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) == " ") c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0)
+        if (c.indexOf(nameEQ) == 0) {
           console.log("token:" + c.substring(nameEQ.length, c.length));
-        // return c.substring(nameEQ.length, c.length);
+          //return c.substring(nameEQ.length, c.length);
+        }
       }
       //return null;
     },
@@ -59,23 +81,49 @@ export default createStore({
     SET_SESSION(token) {
       window.sessionStorage.setItem("token", token);
     },
+    TEST() {
+      console.log("test create post");
+    },
+    LOADING(state) {
+      state.loading = false;
+    },
   },
   actions: {
     async loadPost({ commit }) {
       try {
         const response = await HTTP.get("/api/article");
-        console.log(response);
-        commit("SET_ITEMS", response.data);
+        console.log(response.data._data);
+        commit("SET_LIST_POSTS", response.data._data);
+        commit("LOADING");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async loadMorePost({ commit }, url) {
+      try {
+        const response = await HTTP.get(url);
+        console.log(response.data._data);
+        commit("SET_MORE_LIST_POSTS", response.data._data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async detailPost({ commit }, slug) {
+      try {
+        const response = await HTTP.get("/api/article/" + slug);
+        console.log(response.data._data);
+        commit("SET_POST_DETAIL", response.data._data);
       } catch (error) {
         console.log(error);
       }
     },
     async login({ commit }, formData) {
+      console.log(formData);
       try {
         const response = await HTTP.post("/api/auth/login", formData);
         // commit("SET_TOKEN");
         console.log(response.data.access_token);
-        // window.localStorage.setItem("token", response.data.access_token);
+        //window.localStorage.setItem("token", response.data.access_token);
         const cookie = {
           name: "token",
           value: response.data.access_token,
@@ -104,12 +152,31 @@ export default createStore({
     },
     async getInformation({ commit }) {
       try {
-        console.log(
-          "token from sessionstorage: " + window.sessionStorage.getItem("token")
-        );
+        // console.log(
+        //   "token from sessionstorage: " + window.sessionStorage.getItem("token")
+        // );
         const response = await HTTP.post("/api/auth/me");
-        commit("SET_USER", response.data);
-        console.log(response.data);
+        commit("SET_USER", response.data._data);
+        //console.log(response.data._data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async createPost({ commit }, formData) {
+      console.log(formData);
+      try {
+        const response = await HTTP.post("/api/auth/article/create", formData);
+        console.log(response);
+        commit("TEST");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getPost({ commit }) {
+      try {
+        const response = await HTTP.get("/api/auth/articles");
+        console.log(response.data._data);
+        commit("SET_POST", response.data._data);
       } catch (error) {
         console.log(error);
       }
@@ -122,11 +189,11 @@ export default createStore({
         var c = ca[i];
         while (c.charAt(0) == " ") c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) == 0)
-          console.log(c.substring(nameEQ.length, c.length));
-        window.sessionStorage.setItem(
-          "token",
-          c.substring(nameEQ.length, c.length)
-        );
+          //console.log(c.substring(nameEQ.length, c.length));
+          window.sessionStorage.setItem(
+            "token",
+            c.substring(nameEQ.length, c.length)
+          );
       }
     },
   },

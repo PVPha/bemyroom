@@ -3,7 +3,9 @@
     <div class="item"></div>
     <div class="item item1">
       <h1 class="logo" :style="re_style_logo">
-        <a><img :src="logo" :style="re_style_img" alt="Bemyroom" /></a>
+        <a :href="url"
+          ><img :src="logo" :style="re_style_img" alt="Bemyroom"
+        /></a>
       </h1>
       <h2 :style="re_style_h2">
         <a> BE MY ROOM </a>
@@ -24,6 +26,7 @@ export default {
   data() {
     return {
       logo: require("../../assets/header/logo.svg"),
+      url: "http://localhost:8080/",
     };
   },
   props: {
@@ -39,8 +42,7 @@ export default {
     DialogLogin,
   },
   mounted() {
-    console.log("header");
-
+    //console.log("header");
     // window.addEventListener("scroll", () => {
     //   var header = document.querySelector(".header");
     //   if (header.getBoundingClientRect.bottom < window.innerHeight) {

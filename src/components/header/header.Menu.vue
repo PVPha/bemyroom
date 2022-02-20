@@ -2,7 +2,7 @@
   <div id="header-menu">
     <ul class="menu-header">
       <li>
-        <a>Trang chủ</a>
+        <a :href="url">Trang chủ</a>
       </li>
       <li>
         <a>Chủ đề</a>
@@ -36,12 +36,17 @@
           <ul>
             <li>
               <a :href="'/user-infor'">
-                <span>
-                  <img src="@/assets/content/ava.jpg" alt="" />
+                <span
+                  style="
+                    background-image: url(https://source.unsplash.com/vAsnZcqAuA4/1600x900);
+                  "
+                >
+                  <!-- <img src="@/assets/content/ava.jpg" alt="" /> -->
                 </span>
 
                 <!-- <i class="fas fa-user"></i> -->
                 <!-- Trang cá nhân -->
+                <!-- {{ user._data.name }} -->
                 <span>{{ user.name }}</span>
               </a>
             </li>
@@ -78,7 +83,8 @@ export default {
   name: "HeaderMenu",
   data() {
     return {
-      //show_btnUser: this.$store.state.btnUser,
+      // show_btnUser: this.$store.state.btnUser,
+      url: "http://localhost:8080/",
     };
   },
   props: {
@@ -93,13 +99,13 @@ export default {
     BtnUser,
   },
   computed: {
-    show_btnUser() {
-      if (window.sessionStorage.getItem("token") == "") {
-        return this.$store.state.btnUser;
-      } else return true;
-    },
     user() {
       return this.$store.state.user;
+    },
+    show_btnUser() {
+      if (window.sessionStorage.getItem("token") == null) {
+        return this.$store.state.btnUser;
+      } else return true;
     },
   },
   methods: {
@@ -117,7 +123,7 @@ export default {
       //console.log(isClickInsideElement);
       if (!isClickInsideElement) {
         //console.log(event.target == document.querySelector(".avatar img"));
-        if (event.target == document.querySelector(".avatar img")) {
+        if (event.target == document.querySelector(".avatar")) {
           if (dropMenu.style.display == "block") {
             dropMenu.style.display = "none";
           } else {
@@ -227,11 +233,27 @@ export default {
   height: 6rem;
   margin-right: 1rem;
 }
-.last:last-child #drop-menu ul li > a span:first-child img {
+.last:last-child #drop-menu ul li > a span:last-child {
+  display: inline-block;
+  transform: translateY(-2.5rem);
+}
+/* .last:last-child #drop-menu ul li > a span:first-child img {
   object-fit: cover;
   width: 100%;
   height: 100%;
   border-radius: 0.5rem;
+} */
+.last:last-child #drop-menu ul li > a span:first-child {
+  /* object-fit: cover; */
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* width: 100%; */
+  /* height: 100%; */
+  border-radius: 0.5rem;
+  display: inline-block;
+  width: 5rem;
+  background-position-x: -2rem;
 }
 .last:last-child #drop-menu > div {
   border: 1px solid #c6c2c2;
