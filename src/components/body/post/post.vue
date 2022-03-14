@@ -3,7 +3,13 @@
     <ul :style="re_style_display">
       <li id="post_img">
         <!-- :src="require('@/assets/content/' + src)" -->
-        <a :href="url" :style="{ 'background-image': 'url(' + src + ')' }">
+        <!-- :style="{
+            'background-image': 'url(' + src + ');' + re_style_img + '',
+          }" -->
+        <a
+          :href="url"
+          :style="'background-image: url(' + src + ');' + re_style_img"
+        >
           <!-- <img
             alt="src"
             class="img-fluid"

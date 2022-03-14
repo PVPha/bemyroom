@@ -4,7 +4,7 @@
     <div class="item">
       <h2>Bài viết nổi bật</h2>
       <Post
-        :src="'unsplash1.jpg'"
+        :src="'https://images.unsplash.com/photo-1508161773455-3ada8ed2bbec?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyNjY2ODh8MHwxfHNlYXJjaHwxfHxwb3N0ZXJ8ZW58MHx8fHwxNjM2ODA2MzAz&ixlib=rb-1.2.1&q=85'"
         :title="'Truyện (có thể) là nhiều kỳ về đội ngũ Tiếp Thị Số của...'"
         :re_style_img="'width: 73rem; height: 46rem'"
       />
