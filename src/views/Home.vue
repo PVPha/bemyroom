@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      // loading: false,
     };
   },
   // mounted() {
@@ -43,9 +43,9 @@ export default {
     // posts() {
     //   return this.$store.getters.post;
     // },
-    // loading() {
-    //   return this.$store.state.loading;
-    // },
+    loading() {
+      return this.$store.state.loading;
+    },
     baseUrl() {
       return this.$store.state.baseUrl;
     },
@@ -55,7 +55,7 @@ export default {
     document.onreadystatechange = () => {
       if (document.readyState == "complete") {
         console.log("load completed");
-        // this.$emit("loaded", "True");
+        this.$emit("loaded", "True");
       }
     };
   },
