@@ -6,6 +6,7 @@
   <TopContent />
   <MainContent />
   <Footer />
+  <!-- <Loadpost /> -->
 
   <!-- <a @click="test">test</a> -->
 </template>
@@ -16,6 +17,7 @@ import Header from "@/components/header/header";
 import TopContent from "@/components/body/page/home/top/content.Top";
 import MainContent from "@/components/body/page/home/main/content.Main";
 import Footer from "@/components/footer/footer";
+// import Loadpost from "@/components/body/page/home/loadpost";
 export default {
   name: "Home",
   components: {
@@ -23,9 +25,16 @@ export default {
     TopContent,
     MainContent,
     Footer,
+    // Loadpost,
   },
   created() {
     this.$store.dispatch("loadPost");
+    // console.log(this.$store.getters.getImageFB);
+  },
+  data() {
+    return {
+      loading: false,
+    };
   },
   // mounted() {
   //   console.log(this.$store.getters.listPost);
@@ -34,12 +43,21 @@ export default {
     // posts() {
     //   return this.$store.getters.post;
     // },
-    loading() {
-      return this.$store.state.loading;
-    },
+    // loading() {
+    //   return this.$store.state.loading;
+    // },
     baseUrl() {
       return this.$store.state.baseUrl;
     },
+  },
+  mounted() {
+    console.log("home");
+    document.onreadystatechange = () => {
+      if (document.readyState == "complete") {
+        console.log("load completed");
+        // this.$emit("loaded", "True");
+      }
+    };
   },
   methods: {
     test() {

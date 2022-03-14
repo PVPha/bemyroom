@@ -1,5 +1,48 @@
 import { createStore } from "vuex";
 import axios from "axios";
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDbMvhLX4vwc5s0QtLSLYMcmyLsh47xlOo",
+  authDomain: "be-my-room.firebaseapp.com",
+  projectId: "be-my-room",
+  storageBucket: "be-my-room.appspot.com",
+  messagingSenderId: "555218241540",
+  appId: "1:555218241540:web:ef4c1534d14192d0a0cd51",
+  measurementId: "G-6WMKBB63L3",
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
+// const pathReference = ref(
+//   storage,
+//   "images/243561763_1245431945937232_543240187289985129_n.jpg"
+// );
+// var httpsReference = "";
+// getDownloadURL(pathReference)
+//   .then((url) => {
+//     // `url` is the download URL for 'images/stars.jpg'
+
+//     // This can be downloaded directly:
+//     const xhr = new XMLHttpRequest();
+//     xhr.responseType = "blob";
+//     xhr.onload = () => {
+//       const blob = xhr.response;
+//       console.log(blob);
+//     };
+//     xhr.open("GET", url);
+//     xhr.send();
+
+//     // Or inserted into an <img> element
+//     // const img = document.getElementById("myimg");
+//     // img.setAttribute("src", url);
+//     httpsReference = url;
+//   })
+//   .catch((error) => {
+//     // Handle any errors
+//     console.log(error);
+//   });
 
 export default createStore({
   state: {
@@ -10,6 +53,7 @@ export default createStore({
     detail: [],
     btnUser: false,
     loading: true,
+    httpsReference: "",
   },
   getters: {
     post: (state) => {
@@ -29,6 +73,9 @@ export default createStore({
       state.page = posts;
       // console.log(posts);
       // console.log(state.posts);
+    },
+    SET_IMAGE_LINK: (state, link) => {
+      state.httpsReference = link;
     },
     SET_POST(state, post) {
       state.posts = post;
@@ -91,7 +138,7 @@ export default createStore({
   actions: {
     async loadPost({ commit }) {
       try {
-        const response = await HTTP.get("/api/article");
+        const response = await HTTP.get("/api/article?limit=4");
         console.log(response.data._data);
         commit("SET_LIST_POSTS", response.data._data);
         commit("LOADING");
@@ -195,6 +242,37 @@ export default createStore({
             c.substring(nameEQ.length, c.length)
           );
       }
+    },
+    async uploadImageFB(formData) {
+      console.log(formData);
+      // try {
+      //   const response = await HTTP.post("/api/auth/article/create", formData);
+      //   console.log(response);
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    },
+    getImageFB({ commit }, path) {
+      const pathReference = ref(storage, path);
+      getDownloadURL(pathReference)
+        .then((url) => {
+          // This can be downloaded directly:
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = "blob";
+          xhr.onload = () => {
+            const blob = xhr.response;
+            console.log(blob);
+          };
+          xhr.open("GET", url);
+          xhr.send();
+
+          commit("SET_IMAGE_LINK", url);
+          console.log(url);
+        })
+        .catch((error) => {
+          // Handle any errors
+          console.log(error);
+        });
     },
   },
   modules: {},

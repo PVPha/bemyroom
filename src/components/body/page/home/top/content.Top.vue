@@ -55,6 +55,7 @@ export default {
     },
   },
   mounted() {
+    console.log("top");
     // this.posts = this.$store.state.listPost.data;
 
     // this.posts = getPosts(0, 4);

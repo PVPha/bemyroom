@@ -3,14 +3,13 @@
     <ul :style="re_style_display">
       <li id="post_img">
         <!-- :src="require('@/assets/content/' + src)" -->
-        <a :href="url">
-          <img
-            :src="src"
+        <a :href="url" :style="{ 'background-image': 'url(' + src + ')' }">
+          <!-- <img
             alt="src"
             class="img-fluid"
             :style="re_style_img"
             loading="lazy"
-          />
+          /> -->
         </a>
       </li>
       <li id="post_shortcut" :style="re_style_li + re_style_show">
@@ -87,6 +86,14 @@ export default {
     re_style_detail: String,
     re_style_detail_p: String,
   },
+  methods: {},
+  computed: {
+    img_background() {
+      return {
+        "background-image": "url(" + this.src + ")",
+      };
+    },
+  },
 };
 </script>
 
@@ -102,6 +109,13 @@ export default {
   height: 100%;
   border-radius: 2rem;
   overflow: hidden;
+}
+#post_img a {
+  display: inline-block;
+  width: 35rem;
+  height: 22rem;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 #post_img img {
   width: 40rem;

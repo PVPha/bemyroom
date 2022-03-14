@@ -45,9 +45,27 @@ import LinkTool from "@editorjs/link";
 import Embed from "@editorjs/embed";
 import Quote from "@editorjs/quote";
 import Delimiter from "@editorjs/delimiter";
-//import ImageTool from "@editorjs/image";
+import ImageTool from "@editorjs/image";
 import InlineImage from "editorjs-inline-image";
-import SimpleImage from "simple-image-editorjs";
+// import SimpleImage from "simple-image-editorjs";
+import axios from "axios";
+
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDbMvhLX4vwc5s0QtLSLYMcmyLsh47xlOo",
+  authDomain: "be-my-room.firebaseapp.com",
+  projectId: "be-my-room",
+  storageBucket: "be-my-room.appspot.com",
+  messagingSenderId: "555218241540",
+  appId: "1:555218241540:web:ef4c1534d14192d0a0cd51",
+  measurementId: "G-6WMKBB63L3",
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
+
 export default {
   name: "Editor",
   data() {
@@ -60,6 +78,15 @@ export default {
         tag_id: 1,
       },
     };
+  },
+  methods: {
+    save() {},
+    getTagID(tag) {
+      console.log(tag);
+    },
+    getImg(path) {
+      return this.$store.dispatch("getImageFB", path);
+    },
   },
   created() {
     var editor = new EditorJS({
@@ -108,16 +135,42 @@ export default {
           },
         },
         delimiter: Delimiter,
-        // image: {
-        //   class: ImageTool,
-        //   config: {
-        //     endpoints: {
-        //       byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
-        //       byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
-        //     },
-        //   },
-        // },
-        image: SimpleImage,
+        image: {
+          class: ImageTool,
+          config: {
+            // endpoints: {
+            //   byFile: "http://localhost:8008/uploadFile", // Your backend file uploader endpoint
+            //   // byUrl: "http://localhost:8008/fetchUrl", // Your endpoint that provides uploading by Url
+            // },
+            uploader: {
+              uploadByFile(file) {
+                var formData = new FormData();
+                const path = [];
+                formData.append("image", file);
+                return axios
+                  .post("https://storeimage.herokuapp.com/upload", formData, {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  })
+                  .then(async function (e) {
+                    const pathReference = ref(storage, e.data);
+                    await getDownloadURL(pathReference).then((url) => {
+                      path[0] = url;
+                    });
+                    return {
+                      success: 1,
+                      file: {
+                        url: path[0],
+                        // any other image data you want to store, such as width, height, color, extension, etc
+                      },
+                    };
+                  });
+              },
+            },
+          },
+        },
+        // image: SimpleImage,
         unplash: {
           //https://github.com/kommitters/editorjs-inline-image
           class: InlineImage,
@@ -265,12 +318,16 @@ export default {
               }
               for (let i = 0; i < count; i++) {
                 if (
-                  output.blocks[i].type == "unplash" ||
+                  // output.blocks[i].type == "unplash" ||
                   output.blocks[i].type == "image"
                 ) {
-                  //console.log(output.blocks[i].data);
-                  image = output.blocks[i].data;
+                  image = output.blocks[i].data.file.url;
                   break;
+                } else if (output.blocks[i].type == "unplash") {
+                  image = output.blocks[i].data.url;
+                  break;
+                } else {
+                  image = "";
                 }
               }
               console.log(intro);
@@ -278,7 +335,7 @@ export default {
                 title: output.blocks[0].data.text,
                 content: JSON.stringify(output),
                 introduction: intro + "...",
-                poster: image.url,
+                poster: image,
                 tag_id: 1,
               };
               console.log(formData);
@@ -363,12 +420,6 @@ export default {
   //     });
   //   });
   // },
-  methods: {
-    save() {},
-    getTagID(tag) {
-      console.log(tag);
-    },
-  },
   computed: {
     post() {
       return this.$store.state.post;
