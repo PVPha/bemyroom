@@ -1,8 +1,13 @@
 <template>
   <div class="main-content">
-    <div class="cover-img container-fluid">
+    <div
+      class="cover-img container-fluid"
+      style="
+        background-image: url(https://source.unsplash.com/hM_mLTS1OxI/1600x900);
+      "
+    >
       <!-- <span style="font-size: 8rem; line-height: 18rem">Ảnh bìa</span> -->
-      <img src="@/assets/content/bg.png" alt="" />
+      <!-- <img src="@/assets/content/bg.png" alt="" /> -->
     </div>
     <div class="container-fluid">
       <div class="item left-side">
@@ -11,7 +16,10 @@
             <div class="avatar">
               <img :src="require('@/assets/content/ava.jpg')" alt="" />
             </div>
-            <h5 class="display-name">{{ user.name }}</h5>
+
+            <h5 class="display-name">
+              {{ user.name }}
+            </h5>
             <!-- <p class="username">@username</p>
             <div class="bio">#Goodvibes_goodlife</div> -->
             <button class="btn btn-update" @click="showInfor">
@@ -111,8 +119,9 @@
                     :src="post.src"
                   /> -->
                   <Post
-                    :src="post.src"
+                    :src="post.poster"
                     :title="post.title"
+                    :url="'/read/' + post.slug"
                     :re_style_img="'width: 73rem; height: 46rem;'"
                     :re_style_show="'display: none;'"
                   />
@@ -176,14 +185,17 @@ export default {
     // Slide
   },
   data() {
-    return { posts: [] };
+    // return { posts: [] };
   },
   created() {
-    this.$store.dispatch("getInformation");
+    this.$store.dispatch("getPost");
   },
   computed: {
     user() {
       return this.$store.state.user;
+    },
+    posts() {
+      return this.$store.state.posts;
     },
   },
   mounted() {
@@ -201,20 +213,11 @@ export default {
   },
   methods: {
     handleScroll() {
-      // let ele = this.$refs.scrollComponent;
-      let ele = document.getElementById("lazyLoad");
-      if (ele.getBoundingClientRect().bottom < window.innerHeight) {
-        // this.loading = true;
-        console.log(getPosts(this.posts.length, this.posts.length + 5));
-        this.posts.push(...getPosts(this.posts.length, this.posts.length + 5));
-        // setTimeout(() => {
-
-        //   // this.loading = false;
-        // }, 200);
-      }
-    },
-    showInfor() {
-      console.log(this.user.id);
+      //let ele = document.getElementById("lazyLoad");
+      // if (ele.getBoundingClientRect().bottom < window.innerHeight) {
+      //   console.log(getPosts(this.posts.length, this.posts.length + 5));
+      //   this.posts.push(...getPosts(this.posts.length, this.posts.length + 5));
+      // }
     },
   },
 };
@@ -250,6 +253,8 @@ export default {
   background: #bdbdbd;
   overflow: hidden;
   padding: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .cover-img img {
   object-fit: cover;

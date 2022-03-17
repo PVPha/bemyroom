@@ -1,20 +1,19 @@
 <template>
-  <div id="mainContent" class="container-fluid">
+  <div id="Loadpost" class="container-fluid">
     <div class="item"></div>
     <div class="item">
       <h2>Bài viết mới</h2>
 
       <div
-        class="scroll left-scroll"
+        class="left-scroll"
         @scroll="handleScroll('.left-scroll', 'newPost')"
       >
         <ul class="main-left" id="newPost">
           <li v-for="(post, index) of posts" :key="index">
-            <!-- 'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/7c663890972911eca4b4e5aa78d59c29.jpg' -->
             <Post
               :src="post.poster"
-              :title="post.title"
-              :url="'/read/' + post.slug"
+              :title="''"
+              :url="'/read/'"
               :re_style_img="'width:35rem; height: 22rem'"
               :re_style_post="'max-width:35rem;'"
             />
@@ -26,13 +25,13 @@
       <h2>Tin tức</h2>
       <!-- @scroll="handleScroll('.right-scroll', 'news')" -->
       <transition>
-        <div class="scroll right-scroll">
+        <div class="right-scroll">
           <ul id="news">
             <li v-for="(postNew, index) of postNews" :key="index">
               <Post
                 :src="postNew.poster"
-                :title="postNew.title"
-                :url="'/read/' + postNew.slug"
+                :title="''"
+                :url="'/read/'"
                 :re_style_title="'font-size:1.8rem; font-weight:600'"
                 :re_style_detail="'display:none;'"
               />
@@ -49,7 +48,7 @@ import Post from "@/components/body/post/post.vue";
 
 //import getPosts from "@/api/getPosts.js";
 export default {
-  name: "MainContent",
+  name: "Loadpost",
   data() {
     // return { posts: [], postNews: [] };
   },

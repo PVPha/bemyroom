@@ -28,7 +28,7 @@ export default {
     return {};
   },
   mounted() {
-    console.log("footer");
+    //console.log("footer");
   },
 };
 </script>

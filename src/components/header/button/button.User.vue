@@ -6,10 +6,17 @@
     <button>
       <i class="far fa-bell"></i>
     </button>
-    <button class="avatar">
-      <img src="@/assets/content/ava.jpg" alt="" />
+    <button
+      class="avatar"
+      style="
+        background-image: url(https://source.unsplash.com/P-j3zUpeOkk/1600x900);
+      "
+    >
+      <!-- <img src="@/assets/content/ava.jpg" alt="" /> -->
     </button>
-    <button class="btn-write">Viết bài</button>
+    <button class="btn-write">
+      <a style="color: white !important" :href="'/write'">Viết bài</a>
+    </button>
   </div>
 </template>
 
@@ -27,12 +34,14 @@ export default {
   margin-top: -3rem;
 }
 .btn-user .avatar {
-  max-width: 5rem;
+  width: 5rem;
+  height: 5rem;
   border: 1px solid;
   padding: 0;
   border-radius: 3rem;
   overflow: hidden;
-  max-height: 5rem;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .btn-user .avatar {
   transform: translateY(1rem);

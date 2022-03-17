@@ -22,6 +22,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Write.vue"),
   },
+  {
+    path: "/read/:slug",
+    name: "read",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Read.vue"),
+  },
 ];
 
 const router = createRouter({

@@ -8,11 +8,13 @@ export default {
     this.$store.dispatch("checkCookie");
 
     this.$store.dispatch("getInformation");
+    // this.$store.dispatch("getPost");
     // if (this.$store.state.user == null) {
     //   console.log("empty");
     // } else {
     //   console.log("not null");
     // }
+    //console.log("create");
   },
   mounted() {},
 };
@@ -121,6 +123,9 @@ a:hover {
   -webkit-box-shadow: none !important;
   margin-left: 1.5rem;
 }
+textarea {
+  resize: none;
+}
 @media only screen and (min-width: 1366px) {
   html {
     font-size: 57.5% !important;
@@ -128,5 +133,9 @@ a:hover {
   .header .container {
     margin-left: 17rem;
   }
+}
+
+#editorjs h2 {
+  font-size: 3rem !important;
 }
 </style>
