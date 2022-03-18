@@ -278,7 +278,7 @@ export default createStore({
   modules: {},
 });
 export const HTTP = axios.create({
-  baseURL: "http://bemyroom.herokuapp.com",
+  baseURL: "https://bemyroom.herokuapp.com",
   headers: {
     Authorization: "Bearer" + window.sessionStorage.getItem("token"),
   },
